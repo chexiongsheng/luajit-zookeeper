@@ -84,7 +84,7 @@ ffi.cdef [[
 --begin timeval def
 require "fend.common"
 
---you can replace then fend.common with 
+--you can replace then fend.common requirement with below
 --ffi.cdef [[
 --    typedef long int __time_t;
 --    typedef long int __suseconds_t;
