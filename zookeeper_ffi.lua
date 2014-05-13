@@ -5,6 +5,7 @@
 --  DESCRIPTION:  
 --      OPTIONS:  ---
 -- REQUIREMENTS:  ---
+--       zookeeper 3.4.6
 --         BUGS:  ---
 --        NOTES:  ---
 --       AUTHOR:  John
