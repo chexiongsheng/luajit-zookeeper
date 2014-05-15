@@ -146,6 +146,15 @@ zklib_epoll.zoo_create = function(zh, path, value, flags)
     return rc
 end
 
+zklib_epoll.zoo_client_id = function(zh)
+    local cid = zklib.zoo_client_id(zh)
+    return {client_id = tonumber(cid.client_id), passwd = ffi.string(cid.passwd)}
+end
+
+zklib_epoll.zerror = function(rc)
+    return ffi.string(zklib.zerror(rc))
+end
+
 return zklib_epoll
 
 

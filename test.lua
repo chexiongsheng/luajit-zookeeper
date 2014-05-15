@@ -14,8 +14,6 @@
 --------------------------------------------------------------------------------
 --
 
-local ffi = require 'ffi'
-
 local zklib = require 'zookeeper_epoll'
 local dispatcher = require "fend.epoll"
 local epoll = dispatcher()
@@ -25,14 +23,14 @@ zklib.zoo_set_debug_level(zklib.ZOO_LOG_LEVEL_WARN)
 local zh = zklib.zookeeper_init("192.168.1.250:2181", function(zh, type, state, path, watcherCtx)
     if state == zklib.ZOO_CONNECTED_STATE then
         local cid = zklib.zoo_client_id(zh)
-        print('connnected', 'client_id=', tonumber(cid.client_id), 'passwd=', ffi.string(cid.passwd))
+        print('connnected', 'client_id=', cid.client_id, 'passwd=', cid.passwd)
     end
     --print(type, state, path)
 end, 30000, 0, epoll)
 
 --zklib.zoo_acreate(zh, "/zklib", "john", 0, function(rc, _, data) 
---    print('zoo_acreate rc =', rc, ffi.string(zklib.zerror(rc)), tonumber(ffi.cast('uintptr_t', data))) 
---end, ffi.cast('void *', ffi.cast('uintptr_t', 1234)))
+--    print('zoo_acreate rc =', rc, zklib.zerror(rc)) 
+--end)
 
 local threadpool = require 'threadpool_epoll'
 threadpool.init({
@@ -46,8 +44,8 @@ threadpool.init({
 })
 
 threadpool.work(function()
-    local rc, value = zklib.zoo_create(zh, "/zklib", "john", 0)
-    print('zoo_acreate rc =', rc, ffi.string(zklib.zerror(rc))) 
+    local rc = zklib.zoo_create(zh, "/zklib", "john", 0)
+    print('zoo_acreate rc =', rc, zklib.zerror(rc)) 
 end)
 
 local runing = true
