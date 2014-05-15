@@ -59,7 +59,7 @@ local ZOO_ERRORS = {
 
 local ZooLogLevel = {ZOO_LOG_LEVEL_ERROR=1,ZOO_LOG_LEVEL_WARN=2,ZOO_LOG_LEVEL_INFO=3,ZOO_LOG_LEVEL_DEBUG=4} 
 
-local zklib = setmetatable({}, {__index = function(t, k) return _zk[k] end})
+local zklib = setmetatable({}, {__index  = _zk})
 for k, v in pairs(ZOO_ERRORS) do zklib[k] = v end
 for k, v in pairs(ZooLogLevel) do zklib[k] = v end
 
@@ -69,13 +69,13 @@ zklib.zookeeper_init = function(host, fn, recv_timeout, flags)
     return zh, {client_id = tonumber(clientid_ptr[0].client_id), passwd = ffi.string(clientid_ptr[0].passwd)}
 end
 
-zklib.zoo_acreate = function(zh, path, value, flags, completion) 
+zklib.zoo_acreate = function(zh, path, value, flags, completion, data) 
     local completion_ptr 
-    completion_ptr = ffi.cast("string_completion_t", function(rc, value, data)
+    completion_ptr = (type(completion) ~= 'function') and completion or ffi.cast("string_completion_t", function(rc, value, data)
         completion_ptr:free()
-        completion(rc)
+        if completion then completion(rc, value, data) end
     end)
-    _zk.zoo_acreate(zh, path, value, #value, _zk.ZOO_OPEN_ACL_UNSAFE, flags, completion_ptr, nil)
+    _zk.zoo_acreate(zh, path, value, #value, _zk.ZOO_OPEN_ACL_UNSAFE, flags, completion_ptr, data)
 end
 
 local fd_ptr = ffi.new("int[1]", {0})
