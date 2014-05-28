@@ -18,7 +18,7 @@
 local ffi = require 'ffi'
 local zklib = require 'zookeeper_ffi'
 
-local threadpool = require 'threadpool_epoll'
+local threadpool = require 'threadpool_ext'
 
 local bit = require "bit"
 local wrap_file = require "fend.file".wrap

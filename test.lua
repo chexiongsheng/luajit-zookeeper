@@ -32,7 +32,7 @@ end, 30000, 0, epoll)
 --    print('zoo_acreate rc =', rc, zklib.zerror(rc)) 
 --end)
 
-local threadpool = require 'threadpool_epoll'
+local threadpool = require 'threadpool_ext'
 threadpool.init({
     logger = {
         warn = print,
