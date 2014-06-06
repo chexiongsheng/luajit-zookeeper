@@ -137,7 +137,7 @@ end)
 local WAIT_TIME = 9
 
 zklib_epoll.zoo_create = function(zh, path, value, flags)
-    local seq_num, thread_id = alloc_seq(), threadpool.running.id
+    local seq_num, thread_id = alloc_seq(), threadpool.running()
     zklib.zoo_acreate(zh, path, value, flags, string_completion_ptr, merge_to_void_ptr(seq_num, thread_id))
     local wrc, rc = threadpool.wait(seq_num, WAIT_TIME)
     if wrc ~= 0 then
